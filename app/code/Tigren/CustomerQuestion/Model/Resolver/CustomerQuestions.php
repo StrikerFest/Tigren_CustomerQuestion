@@ -18,7 +18,7 @@ use Tigren\CustomerQuestion\Model\QuestionFactory;
 /**
  * CMS page field resolver, used for GraphQL request processing
  */
-class CustomerQuestion implements ResolverInterface
+class CustomerQuestions implements ResolverInterface
 {
     /**
      * @var SearchCriteriaBuilder

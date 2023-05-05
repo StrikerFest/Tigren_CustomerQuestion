@@ -8,17 +8,33 @@ type CustomerQuestionList {
     pageInfo: PageInfo!
 }
 
-type CustomerQuestion {
-    question_id: ID!
-    created_at: String!
-    updated_at: String!
-    customer_name: String!
-    title: String!
-    content: String!
-}
-
 type PageInfo {
     current_page: Int!
     page_size: Int!
     total_pages: Int!
+}
+
+type Mutation {
+    createQuestion(input: CreateQuestionInput!): CreateQuestionOutput!
+}
+
+input CreateQuestionInput {
+    customer_name: String
+    title: String
+    content: String
+    created_at: String
+    updated_at: String
+}
+
+type CreateQuestionOutput {
+    question: CustomerQuestion!
+}
+
+type CustomerQuestion {
+    question_id: ID
+    created_at: String
+    updated_at: String
+    customer_name: String
+    title: String
+    content: String
 }

@@ -1,24 +1,40 @@
 type Query {
-    customerQuestions(page_size: Int!, current_page: Int!): CustomerQuestionList! @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\CustomerQuestion")
+    customerQuestions(page_size: Int!, current_page: Int!): CustomerQuestionList! @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\CustomerQuestions")
 }
 
-type CustomerQuestionList @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\CustomerQuestion"){
+type CustomerQuestionList @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\CustomerQuestions"){
     items: [CustomerQuestion!]!
     total_count: Int!
     pageInfo: PageInfo!
 }
 
-type CustomerQuestion @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\CustomerQuestion"){
-    question_id: ID!
-    created_at: String!
-    updated_at: String!
-    customer_name: String!
-    title: String!
-    content: String!
-}
-
-type PageInfo @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\CustomerQuestion"){
+type PageInfo @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\CustomerQuestions"){
     current_page: Int!
     page_size: Int!
     total_pages: Int!
+}
+
+type Mutation {
+    createQuestion(input: CreateQuestionInput!): CreateQuestionOutput! @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\CreateQuestion")
+}
+
+input CreateQuestionInput {
+    customer_name: String
+    title: String
+    content: String
+    created_at: String
+    updated_at: String
+}
+
+type CreateQuestionOutput {
+    question: CustomerQuestion! @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\CustomerQuestions")
+}
+
+type CustomerQuestion @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\CustomerQuestions"){
+    question_id: ID
+    created_at: String
+    updated_at: String
+    customer_name: String
+    title: String
+    content: String
 }
