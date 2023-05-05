@@ -16,6 +16,7 @@ type PageInfo {
 
 type Mutation {
     createQuestion(input: CreateQuestionInput!): CreateQuestionOutput!
+    updateQuestion(id: ID!, input: UpdateQuestionInput!): CustomerQuestion!
 }
 
 input CreateQuestionInput {
@@ -28,6 +29,12 @@ input CreateQuestionInput {
 
 type CreateQuestionOutput {
     question: CustomerQuestion!
+}
+
+input UpdateQuestionInput {
+    customer_name: String
+    title: String
+    content: String
 }
 
 type CustomerQuestion {

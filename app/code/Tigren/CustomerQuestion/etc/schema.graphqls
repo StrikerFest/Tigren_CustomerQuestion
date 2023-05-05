@@ -16,6 +16,7 @@ type PageInfo @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\Custo
 
 type Mutation {
     createQuestion(input: CreateQuestionInput!): CreateQuestionOutput! @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\CreateQuestion")
+    updateQuestion(id: ID!, input: UpdateQuestionInput!): CustomerQuestion! @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\UpdateQuestion")
 }
 
 input CreateQuestionInput {
@@ -28,6 +29,12 @@ input CreateQuestionInput {
 
 type CreateQuestionOutput {
     question: CustomerQuestion! @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\CustomerQuestions")
+}
+
+input UpdateQuestionInput {
+    customer_name: String
+    title: String
+    content: String
 }
 
 type CustomerQuestion @resolver(class: "Tigren\\CustomerQuestion\\Model\\Resolver\\CustomerQuestions"){
