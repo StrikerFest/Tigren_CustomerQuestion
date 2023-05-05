@@ -4,10 +4,10 @@
  * @license   Open Software License ("OSL") v. 3.0
  */
 
-import React, {useState ,useEffect} from 'react';
+import React, {  useContext } from 'react';
 import { ApolloClient, gql, InMemoryCache, useQuery } from '@apollo/client';
-import { ApolloProvider, useMutation } from 'react-apollo';
-import { backgroundColor } from 'tailwindcss/lib/plugins';
+import { ApolloProvider} from 'react-apollo';
+import { QuestionProvider, QuestionContext } from './context/QuestionContext';
 
 const client = new ApolloClient({
     uri: 'https://pwa-test.local.pwadev:8525/graphql',
@@ -35,19 +35,6 @@ const GET_QUESTIONS = gql`
     }
 `;
 
-const UPDATE_QUESTION = gql`
-    mutation updateQuestion($id: ID!, $input: UpdateQuestionInput!) {
-        updateQuestion(id: $id, input: $input) {
-                question_id
-                created_at
-                updated_at
-                customer_name
-                title
-                content
-        }
-    }
-`;
-
 const QuestionList = () => {
     const { loading, error, data } = useQuery(GET_QUESTIONS, {
         variables: {
@@ -55,89 +42,31 @@ const QuestionList = () => {
             currentPage: 1,
         },
     });
+    const { setQuestionData } = useContext(QuestionContext);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :( {error.message}</p>;
-    console.log("DATA",data);
+
+    const handleQuestionClick = (question) => {
+        setQuestionData(question);
+        window.location.href = `https://pwa-test.local.pwadev:8525/tigren_question/edit/${question.question_id}`;
+    };
+
     return (
         <ul>
             {data.customerQuestions.items.map(customerQuestion => (
                 <li key={customerQuestion.question_id}>
                     <hr/>
-                    Customer name: {customerQuestion.customer_name}<br/>Title: {customerQuestion.title}<br/> Content: {customerQuestion.content}
-                    <QuestionEdit question={customerQuestion}/>
-                    <hr/>
+                    Customer name: {customerQuestion.customer_name}
+                    <br/>
+                    Title: {customerQuestion.title}
+                    <br/> Content: {customerQuestion.content}
+                    <button onClick={() => handleQuestionClick(customerQuestion)}>
+                        Edit question
+                    </button>
                 </li>
             ))}
         </ul>
-    );
-};
-
-
-const QuestionEdit = ({ question }) => {
-    const [formValues, setFormValues] = useState({
-        customer_name: question.customer_name,
-        title: question.title,
-        content: question.content
-    });
-
-    const [updateQuestion] = useMutation(UPDATE_QUESTION);
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log("DATA LOG",question.question_id);
-        updateQuestion({
-            variables: {
-                id: question.question_id,
-                input: formValues
-            }
-        });
-    };
-
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormValues((prevState) => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-    return (
-        <form onSubmit={handleSubmit} className="form-container" style={{ backgroundColor: 'white' }} >
-            <table >
-                <thead>
-                <tr>
-                    <td colSpan={2}>EDIT</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td style={{ border: 'black solid 1px', padding: '5px' }}>Name:</td>
-                    <td style={{ border: 'black solid 1px', padding: '5px' }}>
-                        <input type="text" name="customer_name" value={formValues.customer_name} onChange={handleChange} className="form-input" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style={{ border: 'black solid 1px', padding: '5px' }}>Title:</td>
-                    <td style={{ border: 'black solid 1px', padding: '5px' }}>
-                        <input type="text" name="title" value={formValues.title} onChange={handleChange} className="form-input" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style={{ border: 'black solid 1px', padding: '5px' }}>Content:</td>
-                    <td style={{ border: 'black solid 1px', padding: '5px' }}>
-                        <textarea name="content" value={formValues.content} onChange={handleChange} className="form-input" rows={1}/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colSpan={2}>
-                        <button type="submit" className="btn btn-submit">Save</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
-
     );
 };
 
@@ -147,7 +76,10 @@ const CustomerQuestion = () => {
             <div>
                 <h1>Question</h1>
                 <hr/>
-                <QuestionList />
+
+                <QuestionProvider>
+                    <QuestionList />
+                </QuestionProvider>
             </div>
         </ApolloProvider>
     );

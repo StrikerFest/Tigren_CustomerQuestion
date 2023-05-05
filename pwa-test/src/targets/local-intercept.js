@@ -15,12 +15,12 @@ module.exports = targets => {
             {
                 name: 'DefaultIndex',
                 pattern: '/tigren_question',
-                path: require.resolve('../components/CustomerQuestion/customerQuestion.js')
+                path: require.resolve('../components/CustomerQuestion/index.js')
             },
             {
                 name: 'Index',
                 pattern: '/tigren_question/index',
-                path: require.resolve('../components/CustomerQuestion/customerQuestion.js')
+                path: require.resolve('../components/CustomerQuestion/index.js')
             },
             {
                 name: 'Create',
