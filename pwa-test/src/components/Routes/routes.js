@@ -6,11 +6,11 @@
 
 import { Route } from '@magento/peregrine';
 
-import CustomerQuestion from '../customerQuestion';
+import CustomerQuestion from '../CustomerQuestion/index';
 
 const Routes = [
     {
-        path: '/customer_question',
+        path: '/tigren_question',
         exact: true,
         component: CustomerQuestion
     }

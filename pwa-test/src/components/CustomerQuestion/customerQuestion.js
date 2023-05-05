@@ -5,53 +5,64 @@
  */
 
 import React from 'react';
-import ApolloClient from 'apollo-boost';
+import { ApolloClient, gql, InMemoryCache, useQuery } from '@apollo/client';
 import { ApolloProvider, Query } from 'react-apollo';
-import gql from 'graphql-tag';
 
 const client = new ApolloClient({
-    uri: 'https://pwa-test.local.pwadev:8525/graphql'
+    uri: 'https://pwa-test.local.pwadev:8525/graphql',
+    cache: new InMemoryCache(),
 });
 
-const CATEGORY_LIST_QUERY = gql`
-  query {
-    categories(filters: {}) {
-      items {
-        id
-        name
-        description
-      }
+const GET_QUESTIONS = gql`
+    query GetQuestions($pageSize: Int!, $currentPage: Int!) {
+        customerQuestions(page_size: $pageSize, current_page: $currentPage) {
+            items {
+                question_id
+                customer_name
+                title
+                content
+                created_at
+                updated_at
+            }
+            total_count
+            pageInfo {
+                current_page
+                page_size
+                total_pages
+            }
+        }
     }
-  }
 `;
 
-function CategoryList() {
-    return (
-        <Query query={CATEGORY_LIST_QUERY}>
-            {({ loading, error, data }) => {
-                if (loading) return <p>Loading...</p>;
-                if (error) return <p>Error :(</p>;
+const QuestionList = () => {
+    const { loading, error, data } = useQuery(GET_QUESTIONS, {
+        variables: {
+            pageSize: 10,
+            currentPage: 1,
+        },
+    });
 
-                return (
-                    <ul>
-                        {data.categories.items.map(category => (
-                            <li key={category.id}>
-                                {category.name}: {category.description}
-                            </li>
-                        ))}
-                    </ul>
-                );
-            }}
-        </Query>
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error :( {error.message}</p>;
+
+    return (
+        <ul>
+            {data.customerQuestions.items.map(customerQuestion => (
+                <li key={customerQuestion.question_id}>
+                    Customer name: {customerQuestion.customer_name}<br/>Title: {customerQuestion.title}<br/> Content: {customerQuestion.content} <hr/>
+                </li>
+            ))}
+        </ul>
     );
-}
+};
 
 const CustomerQuestion = () => {
     return (
         <ApolloProvider client={client}>
             <div>
-                <h1>Categories</h1>
-                <CategoryList />
+                <h1>Question</h1>
+                <hr/>
+                <QuestionList />
             </div>
         </ApolloProvider>
     );

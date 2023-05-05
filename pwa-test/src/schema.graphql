@@ -1,0 +1,24 @@
+type Query {
+    customerQuestions(page_size: Int!, current_page: Int!): CustomerQuestionList!
+}
+
+type CustomerQuestionList {
+    items: [CustomerQuestion!]!
+    total_count: Int!
+    pageInfo: PageInfo!
+}
+
+type CustomerQuestion {
+    question_id: ID!
+    created_at: String!
+    updated_at: String!
+    customer_name: String!
+    title: String!
+    content: String!
+}
+
+type PageInfo {
+    current_page: Int!
+    page_size: Int!
+    total_pages: Int!
+}
