@@ -4,11 +4,9 @@
  * @license   Open Software License ("OSL") v. 3.0
  */
 
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { ApolloClient, gql, InMemoryCache, useQuery } from '@apollo/client';
 import { ApolloProvider } from 'react-apollo';
-import { QuestionProvider, QuestionContext } from './context/QuestionContext';
-
 
 const client = new ApolloClient({
     uri: 'https://pwa-test.local.pwadev:8525/graphql',
@@ -44,8 +42,6 @@ const QuestionList = () => {
         },
         fetchPolicy: 'network-only'
     });
-
-    const { setQuestionData } = useContext(QuestionContext);
 
     const handlePageChange = (pageNumber) => {
         refetch({ currentPage: pageNumber });
@@ -108,7 +104,7 @@ const Pagination = ({ initialPageSize, initialCurrentPage, totalPages, onPageCha
                 <span
                     key={pageNumber}
                     onClick={() => handlePageChange(pageNumber)}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                 > {pageNumber} </span>
             ))}
         </div>
@@ -121,10 +117,7 @@ const CustomerQuestion = () => {
             <div>
                 <h1>Question</h1>
                 <hr />
-
-                <QuestionProvider>
-                    <QuestionList />
-                </QuestionProvider>
+                <QuestionList />
             </div>
         </ApolloProvider>
     );

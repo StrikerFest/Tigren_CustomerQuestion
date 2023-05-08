@@ -7,7 +7,6 @@
 import React, { useState } from 'react';
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 import { ApolloProvider, useMutation } from 'react-apollo';
-// import { QuestionProvider,QuestionContext } from './context/QuestionContext';
 
 const client = new ApolloClient({
     uri: 'https://pwa-test.local.pwadev:8525/graphql',
@@ -97,7 +96,6 @@ const QuestionEdit = () => {
 };
 
 const CustomerQuestion = () => {
-    // const { questionData } = useContext(QuestionContext);
     return (
         <ApolloProvider client={client}>
             <div>
