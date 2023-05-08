@@ -8,11 +8,6 @@ module.exports = targets => {
     targets.of('@magento/venia-ui').routes.tap(routes => {
         routes.push(
             {
-                name: 'MyCustomerQuestion',
-                pattern: '/customerquestion',
-                path: require.resolve('../components/CustomerQuestion/customerQuestion.js')
-            },
-            {
                 name: 'DefaultIndex',
                 pattern: '/tigren_question',
                 path: require.resolve('../components/CustomerQuestion/index.js')

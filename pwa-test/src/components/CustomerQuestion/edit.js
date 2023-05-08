@@ -46,6 +46,7 @@ const QuestionEdit = () => {
                 input: formValues
             }
         });
+        window.location.href = 'https://pwa-test.local.pwadev:8525/tigren_question/index';
     };
 
     const handleChange = (event) => {

@@ -7,7 +7,6 @@
 import React, {useState ,useEffect} from 'react';
 import { ApolloClient, gql, InMemoryCache, useQuery } from '@apollo/client';
 import { ApolloProvider, useMutation } from 'react-apollo';
-import { backgroundColor } from 'tailwindcss/lib/plugins';
 
 const client = new ApolloClient({
     uri: 'https://pwa-test.local.pwadev:8525/graphql',
@@ -59,6 +58,7 @@ const QuestionCreate = () => {
             title: '',
             content: ''
         });
+        window.location.href = 'https://pwa-test.local.pwadev:8525/tigren_question/index';
     };
 
     const handleChange = (event) => {

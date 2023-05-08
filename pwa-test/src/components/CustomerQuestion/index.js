@@ -54,7 +54,6 @@ const QuestionList = () => {
     if (error) return <p>Error :( {error.message}</p>;
 
     const handleQuestionClick = (question) => {
-        setQuestionData(question);
         window.location.href = `https://pwa-test.local.pwadev:8525/tigren_question/edit/${question.question_id}`;
     };
     return (
