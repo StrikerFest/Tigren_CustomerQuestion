@@ -1,0 +1,7 @@
+projects:
+  pwa-test:
+    schema: merged-schema.v3.json
+    include: '**/client-schema.graphql'
+    extensions:
+      endpoints:
+        default: ${MAGENTO_BACKEND_URL}/graphql
