@@ -59,7 +59,7 @@ class UpdateQuestion implements ResolverInterface
         if ($data) {
             $question = $this->questionFactory->create();
             $question->load($id);
-
+            $data['updated_at'] = date('Y-m-d');
             $question->addData($data);
             $question->save();
 

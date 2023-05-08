@@ -36,13 +36,18 @@ const GET_QUESTIONS = gql`
 `;
 
 const QuestionList = () => {
-    const { loading, error, data } = useQuery(GET_QUESTIONS, {
+    const { loading, error, data , refetch} = useQuery(GET_QUESTIONS, {
         variables: {
             pageSize: 10,
             currentPage: 1,
         },
+        fetchPolicy: 'network-only',
     });
     const { setQuestionData } = useContext(QuestionContext);
+
+    React.useEffect(() => {
+        refetch();
+    }, [refetch]);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :( {error.message}</p>;
@@ -61,6 +66,7 @@ const QuestionList = () => {
                     <br/>
                     Title: {customerQuestion.title}
                     <br/> Content: {customerQuestion.content}
+                    <br/>
                     <button onClick={() => handleQuestionClick(customerQuestion)}>
                         Edit question
                     </button>

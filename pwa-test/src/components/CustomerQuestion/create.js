@@ -71,19 +71,38 @@ const QuestionCreate = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <label>
-                Name:
-                <input type="text" name="customer_name" value={formValues.customer_name} onChange={handleChange} />
-            </label>
-            <label>
-                Title:
-                <input type="text" name="title" value={formValues.title} onChange={handleChange} />
-            </label>
-            <label>
-                Content:
-                <textarea name="content" value={formValues.content} onChange={handleChange} />
-            </label>
-            <button type="submit">Submit</button>
+            <table >
+                <thead>
+                <tr>
+                    <td colSpan={2}>EDIT</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td style={{ border: 'black solid 1px', padding: '5px' }}>Name:</td>
+                    <td style={{ border: 'black solid 1px', padding: '5px' }}>
+                        <input type="text" name="customer_name" onChange={handleChange} className="form-input" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style={{ border: 'black solid 1px', padding: '5px' }}>Title:</td>
+                    <td style={{ border: 'black solid 1px', padding: '5px' }}>
+                        <input type="text" name="title"  onChange={handleChange} className="form-input" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style={{ border: 'black solid 1px', padding: '5px' }}>Content:</td>
+                    <td style={{ border: 'black solid 1px', padding: '5px' }}>
+                        <textarea name="content" onChange={handleChange} className="form-input" rows={1}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan={2}>
+                        <button type="submit" className="btn btn-submit">Save</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </form>
     );
 };
