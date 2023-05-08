@@ -4,14 +4,15 @@
  * @license   Open Software License ("OSL") v. 3.0
  */
 
-import React, {  useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { ApolloClient, gql, InMemoryCache, useQuery } from '@apollo/client';
-import { ApolloProvider} from 'react-apollo';
+import { ApolloProvider } from 'react-apollo';
 import { QuestionProvider, QuestionContext } from './context/QuestionContext';
+
 
 const client = new ApolloClient({
     uri: 'https://pwa-test.local.pwadev:8525/graphql',
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache()
 });
 
 const GET_QUESTIONS = gql`
@@ -36,15 +37,19 @@ const GET_QUESTIONS = gql`
 `;
 
 const QuestionList = () => {
-    const { loading, error, data , refetch} = useQuery(GET_QUESTIONS, {
+    const { loading, error, data, refetch } = useQuery(GET_QUESTIONS, {
         variables: {
-            pageSize: 10,
-            currentPage: 1,
+            pageSize: 5,
+            currentPage: 1
         },
-        fetchPolicy: 'network-only',
+        fetchPolicy: 'network-only'
     });
+
     const { setQuestionData } = useContext(QuestionContext);
 
+    const handlePageChange = (pageNumber) => {
+        refetch({ currentPage: pageNumber });
+    };
     React.useEffect(() => {
         refetch();
     }, [refetch]);
@@ -56,23 +61,57 @@ const QuestionList = () => {
         setQuestionData(question);
         window.location.href = `https://pwa-test.local.pwadev:8525/tigren_question/edit/${question.question_id}`;
     };
-
     return (
-        <ul>
-            {data.customerQuestions.items.map(customerQuestion => (
-                <li key={customerQuestion.question_id}>
-                    <hr/>
-                    Customer name: {customerQuestion.customer_name}
-                    <br/>
-                    Title: {customerQuestion.title}
-                    <br/> Content: {customerQuestion.content}
-                    <br/>
-                    <button onClick={() => handleQuestionClick(customerQuestion)}>
-                        Edit question
-                    </button>
-                </li>
+        <div>
+            <ul>
+                {data.customerQuestions.items.map(customerQuestion => (
+                    <li key={customerQuestion.question_id}>
+                        <hr />
+                        Customer name: {customerQuestion.customer_name}
+                        <br />
+                        Title: {customerQuestion.title}
+                        <br /> Content: {customerQuestion.content}
+                        <br />
+                        <button onClick={() => handleQuestionClick(customerQuestion)}>
+                            Edit question
+                        </button>
+                    </li>
+                ))}
+            </ul>
+            Pagination
+            <Pagination
+                initialPageSize={data.customerQuestions.pageInfo.page_size}
+                initialCurrentPage={data.customerQuestions.pageInfo.current_page}
+                totalPages={data.customerQuestions.pageInfo.total_pages}
+                onPageChange={handlePageChange}
+            />
+        </div>
+    );
+};
+
+const Pagination = ({ initialPageSize, initialCurrentPage, totalPages, onPageChange }) => {
+    const [pageSize, setPageSize] = useState(initialPageSize);
+    const [currentPage, setCurrentPage] = useState(initialCurrentPage);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        onPageChange(pageNumber);
+    };
+
+    const arr = [];
+    for (let i = 1; i <= totalPages; i++) {
+        arr.push(i);
+    }
+    return (
+        <div>
+            {arr.map(pageNumber => (
+                <span
+                    key={pageNumber}
+                    onClick={() => handlePageChange(pageNumber)}
+                    style={{ cursor: "pointer" }}
+                > {pageNumber} </span>
             ))}
-        </ul>
+        </div>
     );
 };
 
@@ -81,7 +120,7 @@ const CustomerQuestion = () => {
         <ApolloProvider client={client}>
             <div>
                 <h1>Question</h1>
-                <hr/>
+                <hr />
 
                 <QuestionProvider>
                     <QuestionList />
